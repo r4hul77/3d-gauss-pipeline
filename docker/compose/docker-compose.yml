@@ -1,0 +1,16 @@
+services:
+  hello:
+    container_name: hello_service
+    build:
+      context: ../services/hello
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ../../.env
+  colmap:
+    container_name: colmap_service
+    build:
+      context: ../services/colmap
+      dockerfile: Dockerfile
+    runtime: nvidia
+    restart: unless-stopped
