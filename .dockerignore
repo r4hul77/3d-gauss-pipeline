@@ -1,0 +1,7 @@
+# Ignore everything by default
+**
+
+# Allow 3dgrut source
+!ThirdParty/3dgrut/**
+!.git/**
+!.gitmodules

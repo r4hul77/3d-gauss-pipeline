@@ -16,7 +16,10 @@ services:
     restart: unless-stopped
   3dgrut:
     container_name: 3dgrut_service
+    runtime: nvidia
     build:
       context: ../../ThirdParty/3dgrut
       dockerfile: Dockerfile
+    tty: true
+    stdin_open: true
     restart: unless-stopped

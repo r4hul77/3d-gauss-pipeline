@@ -17,6 +17,7 @@ fi
 mkdir -p "${HOST_OUTPUT}"
 
 docker compose -f docker/compose/docker-compose.yml run --rm \
+  -u $(id -u):$(id -g) \
   -v "${HOST_FRAMES}:/input:ro" \
   -v "${HOST_OUTPUT}:/output" \
   colmap \
