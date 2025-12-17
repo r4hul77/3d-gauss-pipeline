@@ -26,5 +26,5 @@ docker compose -f docker/compose/docker-compose.yml run --rm \
     path=/input out_dir=/output experiment_name=3dgrt \
     export_ply.enabled=true export_usdz.enabled=true \
     export_ply.path=/output/export_last.ply export_usdz.path=/output/export_last.usdz \
-    checkpoint.iterations=[20,40,60,80,100] \
-    n_iterations=100
+    checkpoint.iterations=[2000,4000,6000,8000,10000] \
+    n_iterations=10000
