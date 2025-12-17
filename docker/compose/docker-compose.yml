@@ -71,6 +71,9 @@ services:
       additional_contexts:
         runtime: "service:hello"
   colmap_user:
+    runtime: nvidia
+    tty: true
+    stdin_open: true
     build:
       context: ../services/user
       dockerfile: Dockerfile
