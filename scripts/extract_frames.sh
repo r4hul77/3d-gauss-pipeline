@@ -25,7 +25,7 @@ docker compose -f docker/compose/docker-compose.yml run --rm \
   -v "${VIDEO_DIR}:/input:ro" \
   -v "${HOST_OUTPUT}:/output" \
   --runtime=nvidia \
-  colmap \
+  colmap_user \
   /usr/local/bin/extract_frames.sh \
   "/input/${VIDEO_NAME}" \
   "${FRAME_STRIDE}" \

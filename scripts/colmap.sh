@@ -20,7 +20,7 @@ docker compose -f docker/compose/docker-compose.yml run --rm \
   -u $(id -u):$(id -g) \
   -v "${HOST_FRAMES}:/input:ro" \
   -v "${HOST_OUTPUT}:/output" \
-  colmap \
+  colmap_user \
   /usr/local/bin/colmap_pinhole_pipeline.sh \
   /input \
   /output
