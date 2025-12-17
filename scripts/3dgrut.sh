@@ -17,15 +17,14 @@ fi
 mkdir -p "${HOST_OUTPUT}"
 
 docker compose -f docker/compose/docker-compose.yml run --rm \
-  -u $(id -u):$(id -g) \
   -v "${HOST_DATASET}:/input:ro" \
   -v "${HOST_OUTPUT}:/output" \
   -v /dev/shm:/dev/shm \
-  3dgrut \
+  3dgrut_user \
   conda run -n 3dgrut --no-capture-output \
     python train.py --config-name apps/colmap_3dgrt.yaml \
     path=/input out_dir=/output experiment_name=3dgrt \
     export_ply.enabled=true export_usdz.enabled=true \
     export_ply.path=/output/export_last.ply export_usdz.path=/output/export_last.usdz \
-    checkpoint.iterations=[15000,30000] \
-    n_iterations=30000
+    checkpoint.iterations=[20,40,60,80,100] \
+    n_iterations=100

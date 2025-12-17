@@ -1,3 +1,8 @@
+x-build-args: &build_args
+  UID: ${UID}
+  GID: ${GID}
+  USERNAME: ${USERNAME}
+
 services:
   hello:
     container_name: hello_service
@@ -32,6 +37,33 @@ services:
         SUPERSPLAT_REF: v2.16.1
     ports:
       - "3001:3000"
+  hello_user:
+    build:
+      context: ../services/user
+      dockerfile: Dockerfile
+      args:
+        <<: *build_args
+      additional_contexts:
+        runtime: "service:hello"
+  colmap_user:
+    build:
+      context: ../services/user
+      dockerfile: Dockerfile
+      args:
+        <<: *build_args
+      additional_contexts:
+        runtime: "service:colmap"
+  3dgrut_user:
+    runtime: nvidia
+    tty: true
+    stdin_open: true
+    build:
+      context: ../services/user
+      dockerfile: Dockerfile
+      args:
+        <<: *build_args
+      additional_contexts:
+        runtime: "service:3dgrut"  
     # Many JS dev servers bind to localhost by default.
     # This tries to force bind to all interfaces; if unsupported, it falls back.
     command: sh -lc 'npm run develop -- --host 0.0.0.0 --port 3000 || npm run develop'

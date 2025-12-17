@@ -6,45 +6,94 @@ Please follow the steps **in order**. Skipping steps or modifying inputs without
 
 ---
 
-## Prerequisites
+## Setup
+
+The setup section covers **all one-time configuration** required before running any reconstructions.
+
+### Prerequisites
 
 Before starting, ensure the following:
 
-* Linux workstation (x86_64 or Jetson)
+* Linux workstation (x86_64)
 * NVIDIA GPU with a working driver (`nvidia-smi` should run)
 * Docker installed and working
 * Docker Compose plugin available (`docker compose`)
-* `ffmpeg` installed on the host system
 
 If any of the above are missing, contact the project maintainer before proceeding.
 
 ---
 
-## Step 1: Prepare the Repository and Submodules
+### One-Time Environment Setup
 
-Initialize and prepare all required submodules (including 3DGRUT dependencies):
+All required setup (user IDs, environment variables, Docker configuration, and image builds) is handled automatically using the provided setup script.
+
+Run the following **once per machine or fresh clone**:
 
 ```bash
-bash scripts/prepare_3dgrut.sh
+bash scripts/setup/build.sh
 ```
 
-This step only needs to be run once per fresh clone or after repository updates.
+This step:
+
+* Generates the required `.env` file
+* Builds all necessary Docker images
+* Configures the environment for downstream pipelines
+
+**No manual Docker commands are required.**
 
 ---
 
-## Step 2: Build Docker Images
+### Hugging Face Token (Required for SAM3)
 
-Build all Docker images required for the pipeline:
+Some pipelines (e.g., **SAM3 segmentation**) require access to gated Hugging Face models. This requires a valid Hugging Face access token and prior model approval.
 
-```bash
-docker compose -f docker/compose/docker-compose.yml build
+#### 1. Create a Hugging Face Account
+
+If you do not already have one, create an account at:
+
+```
+https://huggingface.co/join
 ```
 
-This may take several minutes depending on your system and network speed.
+#### 2. Request Access to SAM3
+
+SAM3 is a gated model and requires explicit access approval.
+
+1. Visit the SAM3 model page on Hugging Face
+2. Click **Request Access**
+3. Wait for approval (this may take several hours to a day)
+
+You will not be able to download or use SAM3 until access is granted.
+
+#### 3. Generate a Hugging Face Token
+
+Once access is approved:
+
+1. Go to **Settings → Access Tokens** on Hugging Face
+2. Create a **Read** token
+3. Copy the token (it will only be shown once)
+
+#### 4. Add the Token to `.env`
+
+Open the generated `.env` file and add the following line:
+
+```text
+HUGGINGFACE_TOKEN=hf_xxxxxxxxxxxxxxxxxxxxx
+```
+
+**Do not commit this token to Git.**
+
+The `.env` file is already listed in `.gitignore` and is loaded automatically by Docker Compose.
 
 ---
 
-## Step 3: Extract Frames from the Video
+## Workflow
+
+This section describes the **end-to-end reconstruction workflow**. These steps are repeated **once per video** after setup is complete.
+
+---
+
+### Step 1: Extract Frames from the Video
 
 Extract image frames from the input video using FFmpeg:
 
@@ -62,7 +111,7 @@ A smaller frame stride produces more frames and higher-quality reconstructions, 
 
 ---
 
-## Step 4: Audit Extracted Frames (Manual Step)
+### Step 2: Audit Extracted Frames (Manual Step)
 
 Open the extracted frames and visually inspect them:
 
@@ -74,7 +123,7 @@ Open the extracted frames and visually inspect them:
 
 ---
 
-## Step 5: Run COLMAP Reconstruction
+### Step 3: Run COLMAP Reconstruction
 
 Run the COLMAP pipeline on the extracted frames:
 
@@ -86,7 +135,7 @@ This step generates camera poses and sparse geometry. The output directory will 
 
 ---
 
-## Step 6: Run 3DGRUT Splat Generation
+### Step 4: Run 3DGRUT Splat Generation
 
 Generate the 3DGRUT splat using the refined COLMAP output:
 
@@ -94,28 +143,34 @@ Generate the 3DGRUT splat using the refined COLMAP output:
 bash scripts/3dgrut.sh <VIDEO_DIR>/colmap/stage2 <VIDEO_DIR>/3dgrut
 ```
 
-This step is compute-intensive and typically takes **approximately 2 hours**. Do not interrupt the process once it has started.
+This step is compute-intensive and typically takes **approximately 3 hours**. Do not interrupt the process once it has started.
 
 ---
 
-## Step 7: Post-Processing and Editing
+### Step 5: Post-Process and Edit the Splat
 
-1. Navigate to **[https://supersplat.com](https://supersplat.com)**
-2. Upload the generated splat from:
+1. Launch the SuperSplat editor container:
 
+   ```bash
+   bash scripts/supersplat.sh
    ```
-   <VIDEO_DIR>/3dgrut
-   ```
-3. Edit the splat to retain **only the plant geometry**, removing background and artifacts
+
+2. In a browser, open: `https://localhost:3001`
+
+3. Navigate to **File → Import**, then import the generated `.ply` file from the previous step.
+
+4. Use the editor tools to remove non-plant points and artifacts so that the splat contains **only the plant geometry**.
+
+5. Export the cleaned splat as:
+
+   **<VIDEO_DIR>/edited_gauss.ply**
 
 ---
 
 ## Summary
 
 ```text
-prepare_3dgrut.sh
-        ↓
-docker compose build
+setup/build.sh (one-time setup)
         ↓
 extract_frames.sh
         ↓
@@ -125,14 +180,15 @@ colmap.sh
         ↓
 3dgrut.sh
         ↓
-supersplat.com editing
+supersplat editing
 ```
 
 ---
 
 ## Notes for Students
 
-* Follow the instructions exactly as written
+* Run the setup script before doing anything else
+* Do not manually edit Docker files or environment variables unless instructed
 * Keep all outputs organized within the specified `VIDEO_DIR`
 * If a step fails, do not attempt to skip ahead—debug or ask for help
 * Record any issues or observations for discussion with the research team
