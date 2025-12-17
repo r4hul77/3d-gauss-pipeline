@@ -37,6 +37,31 @@ services:
         SUPERSPLAT_REF: v2.16.1
     ports:
       - "3001:3000"
+  huggingface:
+    build:
+      context: ../services/huggingface
+      dockerfile: Dockerfile
+  
+  huggingface_user:
+    runtime: nvidia
+    tty: true
+    stdin_open: true
+    volumes:
+      - ../../src:/workspace
+      - /dev/shm:/dev/shm
+      - ../../test:/test
+    environment:
+      - HF_TOKEN=${HUGGINGFACE_TOKEN}
+    env_file:
+      - ../../.env
+    build:
+      context: ../services/user
+      dockerfile: Dockerfile
+      args:
+        <<: *build_args
+      additional_contexts:
+        runtime: "service:huggingface"
+
   hello_user:
     build:
       context: ../services/user
