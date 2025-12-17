@@ -98,7 +98,7 @@ This section describes the **end-to-end reconstruction workflow**. These steps a
 Extract image frames from the input video using FFmpeg:
 
 ```bash
-bash scripts/extract_frames.sh <VIDEO_PATH> <FRAME_STRIDE> <VIDEO_DIR>/ffmpeg_frames
+bash scripts/extract_frames.sh <VIDEO_PATH> <FRAME_STRIDE> <VIDEO_DIR>
 ```
 
 **Arguments**
