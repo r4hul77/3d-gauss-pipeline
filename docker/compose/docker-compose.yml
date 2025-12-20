@@ -2,6 +2,7 @@ x-build-args: &build_args
   UID: ${UID}
   GID: ${GID}
   USERNAME: ${USERNAME}
+  NVIDIA_CUDA_VERSION: ${NVIDIA_CUDA_VERSION}
 
 services:
   hello:
@@ -17,6 +18,8 @@ services:
     build:
       context: ../services/colmap
       dockerfile: Dockerfile
+      args:
+        NVIDIA_CUDA_VERSION: ${NVIDIA_CUDA_VERSION}
     runtime: nvidia
     restart: unless-stopped
   3dgrut:
