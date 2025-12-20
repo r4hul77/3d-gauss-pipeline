@@ -128,7 +128,7 @@ Open the extracted frames and visually inspect them:
 Run the COLMAP pipeline on the extracted frames:
 
 ```bash
-bash scripts/colmap.sh <VIDEO_DIR>/ffmpeg_frames <VIDEO_DIR>/colmap
+bash scripts/colmap.sh <VIDEO_DIR>/ffmpeg_images <VIDEO_DIR>/colmap
 ```
 
 This step generates camera poses and sparse geometry. The output directory will contain multiple stages, including `stage2`, which is required for the next step.
@@ -187,10 +187,9 @@ supersplat editing
 
 ## Notes for Students
 
-* Run the setup script before doing anything else
+* Run the setup script before doing anything else for the first time
 * Do not manually edit Docker files or environment variables unless instructed
 * Keep all outputs organized within the specified `VIDEO_DIR`
-* If a step fails, do not attempt to skip ahead—debug or ask for help
 * Record any issues or observations for discussion with the research team
 
 ---
