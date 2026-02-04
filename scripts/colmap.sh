@@ -16,8 +16,7 @@ fi
 
 mkdir -p "${HOST_OUTPUT}"
 
-docker compose -f docker/compose/docker-compose.yml run --rm \
-  -u $(id -u):$(id -g) \
+docker compose --env-file .env -f docker/compose/docker-compose.yml run --rm \
   -v "${HOST_FRAMES}:/input:ro" \
   -v "${HOST_OUTPUT}:/output" \
   colmap_user \

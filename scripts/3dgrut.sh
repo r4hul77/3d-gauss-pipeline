@@ -16,7 +16,7 @@ fi
 
 mkdir -p "${HOST_OUTPUT}"
 
-docker compose -f docker/compose/docker-compose.yml run --rm \
+docker compose --env-file .env -f docker/compose/docker-compose.yml run --rm \
   -v "${HOST_DATASET}:/input:ro" \
   -v "${HOST_OUTPUT}:/output" \
   -v /dev/shm:/dev/shm \

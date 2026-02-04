@@ -20,8 +20,7 @@ VIDEO_NAME=$(basename "${HOST_VIDEO}")
 
 mkdir -p "${HOST_OUTPUT}"
 
-docker compose -f docker/compose/docker-compose.yml run --rm \
-  -u $(id -u):$(id -g) \
+docker compose --env-file .env -f docker/compose/docker-compose.yml run --rm \
   -v "${VIDEO_DIR}:/input:ro" \
   -v "${HOST_OUTPUT}:/output" \
   colmap_user \

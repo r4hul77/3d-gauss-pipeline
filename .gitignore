@@ -3,3 +3,8 @@ ThirdParty/*
 .env*
 *.pixi
 pixi*
+.3dgrt_cache/ccache/*
+.3dgrt_cache/compute_cache/*
+.3dgrt_cache/pip/*
+.3dgrt_cache/torch_extensions/*
+.3dgrt_cache/torch/*
