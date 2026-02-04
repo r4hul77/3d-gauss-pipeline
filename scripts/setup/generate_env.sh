@@ -13,6 +13,12 @@ if [ -z "${HUGGINGFACE_TOKEN:-}" ]; then
     HUGGINGFACE_TOKEN="EMPTY_TOKEN"
 fi
 
+if [ -z "${NVIDIA_CUDA_VERSION:-}" ]; then
+    echo "Please Set Nvida CUDA Version to build the colmap image properly. Setting it to 13.0.0"
+    NVIDIA_CUDA_VERSION="13.0.0"
+fi
+
+
 
 cat > "${ENV_FILE}" <<EOF
 ENVIRONMENT=development
@@ -22,6 +28,7 @@ UID=${UID_VAL}
 GID=${GID_VAL}
 USERNAME=${USERNAME_VAL}
 HUGGINGFACE_TOKEN=${HUGGINGFACE_TOKEN}
+NVIDIA_CUDA_VERSION=${NVIDIA_CUDA_VERSION}
 EOF
 
 echo "Generated ${ENV_FILE} with:"
