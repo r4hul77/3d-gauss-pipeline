@@ -99,3 +99,16 @@ services:
     # This tries to force bind to all interfaces; if unsupported, it falls back.
     command: sh -lc 'npm run develop -- --host 0.0.0.0 --port 3000 || npm run develop'
     restart: unless-stopped
+    volumes:
+      - ../../.3dgrt_cache:/.3dgrt_cache
+      - /dev/shm:/dev/shm
+
+    environment:
+      - TORCH_EXTENSIONS_DIR=/.3dgrt_cache/torch_extensions
+      - CUDA_CACHE_PATH=/.3dgrt_cache/compute_cache
+      - CUDA_CACHE_MAXSIZE=2147483648
+      - PIP_CACHE_DIR=/.3dgrt_cache/pip
+      - CCACHE_DIR=/.3dgrt_cache/ccache
+      - TORCH_HOME=/.3dgrt_cache/torch
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
