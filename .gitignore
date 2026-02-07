@@ -1,8 +1,7 @@
 test/*
 ThirdParty/*
 .env*
-*.pixi
-pixi*
+.pixi/*
 .3dgrt_cache/ccache/*
 .3dgrt_cache/compute_cache/*
 .3dgrt_cache/pip/*
