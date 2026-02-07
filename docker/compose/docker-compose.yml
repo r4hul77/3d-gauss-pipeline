@@ -97,11 +97,14 @@ services:
         runtime: "service:3dgrut"  
     # Many JS dev servers bind to localhost by default.
     # This tries to force bind to all interfaces; if unsupported, it falls back.
-    command: sh -lc 'npm run develop -- --host 0.0.0.0 --port 3000 || npm run develop'
+    ports:
+      - "8080:8080"
     restart: unless-stopped
     volumes:
       - ../../.3dgrt_cache:/.3dgrt_cache
       - /dev/shm:/dev/shm
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /home/r4hul/ssd1:/ssd1
 
     environment:
       - TORCH_EXTENSIONS_DIR=/.3dgrt_cache/torch_extensions
@@ -112,3 +115,4 @@ services:
       - TORCH_HOME=/.3dgrt_cache/torch
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - DISPLAY=${DISPLAY}
