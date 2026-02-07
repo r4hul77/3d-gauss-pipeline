@@ -1,0 +1,31 @@
+[workspace]
+authors = ["r4hul <r4hul@ksu.edu>"]
+channels = ["conda-forge"]
+name = "3d_guass_splats"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+python = ">=3.12.2,<3.13"
+pip = ">=20.0,<26"
+packaging = "<25"
+
+[pypi-dependencies]
+pycalib = ">=0.1.0.dev6, <0.2"
+opencv-python = ">=4.13.0.90, <5"
+ipykernel = ">=7.1.0, <8"
+pyyaml = ">=6.0.3, <7"
+scikit-image = ">=0.26.0, <0.27"
+tqdm = ">=4.67.2, <5"
+poselib = ">=2.0.5, <3"
+jupyter = ">=1.1.1, <2"
+ipympl = ">=0.10.0, <0.11"
+romav2 = ">=2.0.0, <3"
+pycolmap = ">=3.13.0, <4"
+vismatch = ">=1.1.1, <2"
+gtsam = "==4.3a0"
+pycalib-simple = ">=2025.12.5.1, <2026"
+numpy = ">=2.4.2, <3"
+opencv-contrib-python = ">=4.13.0.92, <5"
